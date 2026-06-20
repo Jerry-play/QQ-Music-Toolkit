@@ -20,7 +20,7 @@ pip install -r requirements.txt
 
 ### 2. 安装 ffmpeg（格式转换必需）
 
-- **Windows**: 从 [ffmpeg 官网](https://ffmpeg.org/download.html) 下载并添加到系统 PATH
+- **Windows**: 从 [ffmpeg 官网](https://ffmpeg.org/download.html) 下载并***添加到系统 PATH***
 - **Linux**: `sudo apt-get install ffmpeg` 或 `sudo yum install ffmpeg`
 - **macOS**: `brew install ffmpeg`
 
@@ -106,7 +106,7 @@ python main.py decrypt -i ./encrypted -o ./mp3 -f mp3 --replace
 
 #### 3. 音频格式转换
 
-将音频文件转换为不同格式，智能保留元数据和音质。
+将音频文件转换为不同格式，保留元数据。
 
 ```bash
 # 转换单个文件
@@ -124,16 +124,9 @@ python main.py convert -i ./input -o ./output -f m4a
 ```
 
 **参数说明：**
-- `-i, --input`：输入文件或目录路径 **必需**
+- `-i, --input`：输入文件或目录路径 **（必需）**
 - `-o, --output`：输出目录（可选，不指定则使用输入文件所在目录；批量转换时必需）
 - `-f, --format`：输出格式（mp3, flac, ogg, wav, m4a），默认: mp3
-
-**智能编码特性：**
-- 自动检测源文件码率和编码器
-- 无损源文件使用高质量编码
-- 有损源文件采用保守策略避免音质损失
-- 自动提取和写入元数据（标题、艺术家、专辑等）
-- OGG Vorbis 转 MP3 时启用 ID3v2.3 + ID3v1 标签
 
 ---
 
@@ -155,7 +148,7 @@ python main.py clean-lrc ./lyrics -y
 
 ---
 
-## 💡 使用示例
+## 使用示例
 
 ### 场景 1：批量解密并转换所有歌曲为 MP3
 
@@ -189,11 +182,7 @@ python main.py convert -i song.ogg -f mp3
 
 ---
 
-## ⚙️ 技术细节
-
-### 解密原理
-
-本工具使用 Frida 动态插桩技术，注入 QQMusic.exe 进程，调用其内部的 `EncAndDesMediaFile` 类进行解密。解密过程在内存中完成，无需修改 QQ 音乐客户端。
+## 部分技术说明
 
 ### 格式转换策略
 
@@ -217,18 +206,17 @@ python main.py convert -i song.ogg -f mp3
 
 ---
 
-## ⚠️ 注意事项
+## 注意事项
 
 1. **QQ 音乐必须运行**：解密功能需要 QQ 音乐客户端处于运行状态
 2. **管理员权限**：如果 Frida 附加失败，尝试以管理员身份运行命令行
 3. **路径支持中文**：工具内部已处理中文路径兼容性问题
 4. **磁盘空间**：批量转换时确保有足够的临时空间
-5. **版权说明**：请仅用于个人学习研究，尊重音乐版权
 6. **版本兼容**：如遇到解密失败，可能是 QQ 音乐版本更新导致，请检查 `hook_qq_music.js` 中的函数签名
 
 ---
 
-## 🛠️ 故障排除
+## 故障排除
 
 ### 问题 1：Frida 附加失败
 
